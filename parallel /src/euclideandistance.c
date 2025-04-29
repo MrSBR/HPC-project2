@@ -1,3 +1,5 @@
+#include "../include/GSMPI.h"
+
 double euclidean_distance(int kmax, int jmax, int imax, double ***arr1, double ***arr2) {
     double sum_sq_diff = 0.0;
     int k, j, i;

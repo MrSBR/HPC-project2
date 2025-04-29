@@ -1,9 +1,6 @@
-#include <stdio.h>
-#include <stdbool.h>
-#include <mpi.h>
 #include "../include/GSMPI.h"
 
-void GS_iteration_2_chunks_mpi_test(int my_rank, int kmax, int my_jmax, int imax, double ***my_phi) {
+void GS_iteration_2_chunks_mpi(int my_rank, int kmax, int my_jmax, int imax, double ***my_phi) {
     int count = imax; // Number of elements to send 
     int tag; // Tag for the message. Filtering what messages to recieve, ensuring that the right message is sent to the right process
     int dest; // Destination process (rank) 

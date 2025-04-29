@@ -73,7 +73,7 @@ The MPI implementation requires installation of OpenMPI or MPICH such that the `
 
 ### Running
 
-To run the serial executable:
+To run the serial and parallel executable respectivley:
 ```bash
 ./main_serial <num_iters> <kmax> <jmax> <imax>
 
@@ -81,7 +81,6 @@ forexample:
 ```bash
 ./main_serial 100 3 4 3  
 
-To run the parallel executable: 
 ```bash
 # General format
 mpirun -np 2 main_parallel <num_iters> <kmax> <jmax> <imax>
