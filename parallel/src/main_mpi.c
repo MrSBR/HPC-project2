@@ -14,12 +14,12 @@ int main(int nargs, char **args) {
         MPI_Abort(MPI_COMM_WORLD, 1);
     }
 
-    int num_values; // How many values to send/recieve with MPI 
-    MPI_Datatype data_type; // Data type to send/recieve 
-    int destination; // Rank of the recieving process
-    int source; // Rank of the sending process
-    int tag; // Tag for the message, which works as an ID to link specific send and recieve. 
-    MPI_Comm comn = MPI_COMM_WORLD; // Communicator for the message; world communicator
+    int num_values;                         // How many values to send/recieve with MPI 
+    MPI_Datatype data_type;                 // Data type to send/recieve 
+    int destination;                        // Rank of the recieving process
+    int source;                             // Rank of the sending process
+    int tag;                                // Tag for the message, which works as an ID to link specific send and recieve. 
+    MPI_Comm comn = MPI_COMM_WORLD;         // Communicator for the message; world communicator
     MPI_Status *status = MPI_STATUS_IGNORE; // Pointer to status object containing info on the recieved message. We ignore status since it's not used
     
     // Dividing the main file into rank 0 and rank 1, where rank 0 is the root node
@@ -30,6 +30,11 @@ int main(int nargs, char **args) {
         jmax = atoi(args[3]);
         imax = atoi(args[4]);
 
+        printf("Running Gauss-Seidel Comparison:\n");
+        printf("  Iterations: %d\n", num_iters);
+        printf("  Dimensions: kmax=%d, jmax=%d, imax=%d\n", kmax, jmax, imax);
+        printf("  Interior points: %d x %d x %d\n", kmax-2, jmax-2, imax-2);
+
         source = 1; 
         destination = 1; 
 
@@ -37,6 +42,7 @@ int main(int nargs, char **args) {
         MPI_Datatype data_type = MPI_INT;
         int tag = 1; 
         // Send the input values to process 1
+        printf("Sending input values to process 1\n");
         MPI_Send(&num_iters, num_values, data_type, destination, tag, comn);
         MPI_Send(&kmax, num_values, data_type, destination, tag, comn);
         MPI_Send(&jmax, num_values, data_type, destination, tag, comn);
@@ -46,6 +52,8 @@ int main(int nargs, char **args) {
         double ***array_mpi; 
         double ***array_serial;
         int jmid = jmax/2 + 1;
+
+        printf("Allocating and initializing first half of the 3D array \n");
         allocate_array3D(kmax, jmid, imax, &array_mpi);
         
         // Initialize the first half of the 3D array 
@@ -60,14 +68,19 @@ int main(int nargs, char **args) {
         }
         
         allocate_array3D(kmax, jmax, imax, &array_serial);
+        printf("Allocating and initializing first half of the 3D array complete\n");
+
 
         // Compute the first half of the 3D array
+        printf("Performing %d iterations on first half of the 3D array\n", num_iters);
         for (int _ = 0; _ < num_iters; _++) {
             GS_iteration_2_chunks_mpi(my_rank, kmax, jmid, imax, array_mpi);
             GS_iteration_2_chunks(kmax, jmax, imax, array_serial);
         }
+        printf("Iterations complete.\n");
 
         // Receive the results from process 1 and store in temp array 
+        printf("Receiving results from process 1.\n");
         double ***recieved_array;
         allocate_array3D(kmax, jmid, imax, &recieved_array);
 
@@ -81,6 +94,7 @@ int main(int nargs, char **args) {
         }
 
         // Construct the global array from the two halves
+        printf("Creating and filling the global array\n");
         double ***global_array;
         allocate_array3D(kmax, jmax, imax, &global_array);
         for (int k = 1; k < kmax-1; k++) {
@@ -96,6 +110,7 @@ int main(int nargs, char **args) {
                 }
             }
         }
+        printf("Creating and filling the global array complete\n");
         printf("Num Iters=%d, kmax=%d, jmax=%d, imax=%d \n", num_iters, kmax, jmax, imax);
         printf("EuclideanDistance (Serial vs Normal): %g \n", euclidean_distance(kmax, jmax, imax, array_serial, global_array));
 

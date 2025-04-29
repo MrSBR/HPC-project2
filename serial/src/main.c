@@ -70,7 +70,6 @@ int main (int nargs, char **args)
     }
     printf("Iterations complete.\n");
 
-
     // --- Calculate and print difference ---
     printf("Comparing Serial result with normal result...\n");
     double diff = euclidean_distance(kmax, jmax, imax, arr1, arr2);

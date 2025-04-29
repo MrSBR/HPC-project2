@@ -33,4 +33,3 @@ void allocate_array3D(int kmax, int jmax, int imax, double ****array) {
         }
     }
 }
-
