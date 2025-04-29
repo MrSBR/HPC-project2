@@ -111,6 +111,7 @@ int main(int nargs, char **args) {
             }
         }
         printf("Creating and filling the global array complete\n");
+        printf("\n--- Final Comparison ---\n");
         printf("Num Iters=%d, kmax=%d, jmax=%d, imax=%d \n", num_iters, kmax, jmax, imax);
         printf("EuclideanDistance (Serial vs Normal): %g \n", euclidean_distance(kmax, jmax, imax, array_serial, global_array));
 

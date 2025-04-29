@@ -28,23 +28,21 @@ The submission is organized as follows:
     -   `src/`: contains c files
         -   `allocatearray3D.c`
         -   `euclideandistance.c`: 
-        -   `GSiteration2chuncks.c`: 
-        -   `GSiterationnormal.c`:
-        -   `main.c`:
-    -   `main_serial`:
+        -   `GSiteration2chunksmpi.c`: 
+        -   `GSiteration2chunksserial.c`:
+        -   `main_mpi.c`:
+    -   `main_parallel`:
     -   `Makefile`:
 
 ## Implementation
 
-This folder contains a serial C implementation of the Gauss-Seidel algorithm for a 3D grid, strictly following the functions requested in task section 3.1. It includes:
+This folder contains a serial C implementation of the Gauss-Seidel algorithm for a 3D grid. It includes:
 1.  The standard iteration method (`GS_iteration_normal`).
 2.  A wavefront-based iteration using two chunks (`GS_iteration_2_chunks`).
 3.  Helper functions for 3D array allocation (`allocate_array3D`) and calculating the Euclidean distance (`euclidean_distance`) between two arrays.
 4.  A main program (`main_serial.c`) that runs both iteration methods for a specified number of iterations and compares their results.
 
-This folder also contains the MPI parallel implementation using 2 processes and domain decomposition in the j-direction. In addition to the serial implementation it includes: 
-1. 
-
+This folder also contains the MPI parallel implementation using 2 processes doing the same as the serial implementation. It contains the same as the serial implementation but with MPI modifications.
 
 ### Compilation
 
@@ -82,7 +80,7 @@ forexample:
 ./main_serial 100 3 4 3  
 
 ```bash
-# General format
+# General format for 2 processes
 mpirun -np 2 main_parallel <num_iters> <kmax> <jmax> <imax>
 
 # Example:
